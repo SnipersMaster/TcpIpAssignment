@@ -4,6 +4,8 @@ import java.awt.event.*;
 import javax.swing.JFrame;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 class GUI extends JFrame{
     static final DefaultListModel genap = new DefaultListModel();
@@ -32,6 +34,12 @@ class GUI extends JFrame{
     private void initEvent(){
         this.addWindowListener(new WindowAdapterImpl());
         btnEnd.addActionListener(this::btnEndClick);
+        list.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                System.out.println(list.getSelectedValue().toString());
+            }
+        });
         genap.addListDataListener(new ListDataListener() {
             @Override
             public void intervalAdded(ListDataEvent e) {

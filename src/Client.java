@@ -20,7 +20,7 @@ public class Client {
         GUI f = new GUI();
         f.setVisible(true);
 
-        socket = new Socket("192.168.1.109", 7111);
+        socket = new Socket("192.168.1.109", 7112);
         serverSocket=new ServerSocket(7222);
         while (true) {
             Socket socket = serverSocket.accept();
