@@ -7,6 +7,6 @@ public class Client {
     int y=0;
       String anwar;
       // anwar
-
+     //pasdasd
   }
 }
