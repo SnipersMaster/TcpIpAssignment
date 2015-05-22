@@ -19,7 +19,7 @@ public class BooksServer  {
     {
 
         System.out.println("I am in the background");
-        bookserverSocket=new ServerSocket(7169);
+        bookserverSocket=new ServerSocket(7111);
         while (true) {
             bookSocket=bookserverSocket.accept();
             BufferedInputStream bookiBufferedInputStream=new BufferedInputStream(bookSocket.getInputStream());
@@ -46,7 +46,7 @@ public class BooksServer  {
 
     public static void SendToClient(String text) throws IOException {
 
-        Socket socket = new Socket("localhost", 7170);
+        Socket socket = new Socket("192.168.1.105", 7222);
         OutputStream outputStream = socket.getOutputStream();
         // bufferwriter it sends to the server ->OutputStreamWriter -> OutputStream -> socket.getOutputStream();
         BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream));
