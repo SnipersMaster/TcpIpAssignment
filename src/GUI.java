@@ -1,15 +1,19 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 class GUI extends JFrame{
     static final DefaultListModel genap = new DefaultListModel();
     static final JList list = new JList(genap);
     private final JButton btnUp = new JButton("UpLoad");
     private final JButton btnEnd = new JButton("END");
+    static  JFileChooser chooser;//for download
     public GUI(){
         setTitle("Client GUI");
         setSize(350,300);
@@ -32,20 +36,32 @@ class GUI extends JFrame{
     private void initEvent(){
         this.addWindowListener(new WindowAdapterImpl());
         btnEnd.addActionListener(this::btnEndClick);
-        genap.addListDataListener(new ListDataListener() {
+        list.addListSelectionListener(new ListSelectionListener() {
             @Override
-            public void intervalAdded(ListDataEvent e) {
-
-            }
-
-            @Override
-            public void intervalRemoved(ListDataEvent e) {
-
-            }
-
-            @Override
-            public void contentsChanged(ListDataEvent e) {
-
+            public void valueChanged(ListSelectionEvent e) {
+                if(e.getValueIsAdjusting())
+                    return;
+            System.out.println(list.getSelectedValue().toString());
+                chooser = new JFileChooser();
+                chooser.setCurrentDirectory(new java.io.File("."));
+                chooser.setDialogTitle("Choose Destination folder");
+                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                //
+                // disable the "All files" option.
+                //
+                chooser.setAcceptAllFileFilterUsed(false);
+                //
+                if (chooser.showOpenDialog(GUI.this) == JFileChooser.APPROVE_OPTION) {
+                    System.out.println("getCurrentDirectory(): "
+                            +  chooser.getCurrentDirectory());
+                    System.out.println("getSelectedFile() : "
+                            +  chooser.getSelectedFile());
+                    try{Client.SendToServer(list.getSelectedValue().toString());}
+                    catch(IOException ex){ex.printStackTrace();}
+                }
+                else {
+                    System.out.println("No Selection ");
+                }
             }
         });
     }

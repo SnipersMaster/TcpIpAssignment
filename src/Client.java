@@ -20,7 +20,8 @@ public class Client {
         GUI f = new GUI();
         f.setVisible(true);
 
-        socket = new Socket("192.168.1.109", 7111);
+
+        SendToServer("getbooks");
         serverSocket=new ServerSocket(7222);
         while (true) {
             Socket socket = serverSocket.accept();
@@ -30,13 +31,12 @@ public class Client {
             // read reading values from bufferreader
             read = bufferedReader.readLine();
             GUI.genap.addElement(read);
-            System.out.println(read);
+
         }
 
     }
     public static void SendToServer(String text) throws IOException {
-
-        Socket socket = new Socket("localhost", 7170);
+        socket = new Socket("192.168.1.109", 7111);
         OutputStream outputStream = socket.getOutputStream();
         // bufferwriter it sends to the server ->OutputStreamWriter -> OutputStream -> socket.getOutputStream();
         BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream));
