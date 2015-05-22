@@ -4,7 +4,7 @@
 public class Client {
   public static void main()
   {
-    int x=0;
+    int y=0;
       String anwar;
       // anwar
 
