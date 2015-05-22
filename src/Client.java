@@ -17,8 +17,11 @@ public class Client {
     static ServerSocket serverSocket;
     public static void main(String[] arg) throws IOException
     {
-        socket = new Socket("localhost", 7169);
-        serverSocket=new ServerSocket(7170);
+        GUI f = new GUI();
+        f.setVisible(true);
+
+        socket = new Socket("192.168.1.109", 7111);
+        serverSocket=new ServerSocket(7222);
         while (true) {
             Socket socket = serverSocket.accept();
             // buffer it reads from server  , requires inputstreamreader  -> inputstream -> socket.getInputStream()  ,
@@ -26,6 +29,7 @@ public class Client {
             String read;
             // read reading values from bufferreader
             read = bufferedReader.readLine();
+            GUI.genap.addElement(read);
             System.out.println(read);
         }
 
