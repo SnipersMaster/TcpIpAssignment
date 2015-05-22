@@ -6,6 +6,7 @@ public class Client {
   {
     int x=0;
       String anwar;
+      // anwar
 
   }
 }
