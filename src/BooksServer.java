@@ -36,7 +36,9 @@ public class BooksServer  {
                         if (Files.isRegularFile(filePath)) {
 
                             try {
-                                SendToClient(filePath.getFileName().toString());
+
+                                SocketThread socketThread=new SocketThread(new Socket("172.18.213.165", 7222),filePath.getFileName().toString());
+                                socketThread.run();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -46,29 +48,31 @@ public class BooksServer  {
                     });
                 }else if(!read.contains("getbooks"))
                 {
+
+                    SendFiletoClient(read);
                     System.out.println("the book is : "+read);
                 }
 
 
             }
 
-
-
-            // first step to get all the files in the books path
+    // first step to get all the files in the books path
 
     }
 
-    public static void SendToClient(String text) throws IOException {
-
-        Socket socket = new Socket("192.168.1.105", 7222);
-        OutputStream outputStream = socket.getOutputStream();
-        // bufferwriter it sends to the server ->OutputStreamWriter -> OutputStream -> socket.getOutputStream();
-        BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream));
-        // to send
-        bufferedWriter.write(text);
-        // to refresh
-        bufferedWriter.flush();
-        // close
+    public static void SendFiletoClient(String filename) throws IOException
+    {   Socket socket = new Socket("172.16.15.191", 7333);
+        File file=new File("Books/"+filename);
+        byte[] filearray=new byte[(int)file.length()];
+        FileInputStream fileInputStream=new FileInputStream(file);
+        BufferedInputStream bufferedInputStream=new BufferedInputStream(fileInputStream);
+        bufferedInputStream.read(filearray,0,filearray.length);
+        OutputStream outputStream=socket.getOutputStream();
+        System.out.println("sending file");
+        outputStream.write(filearray,0,filearray.length);
+        outputStream.flush();
         socket.close();
+        System.out.println("File Transfer complete");
     }
+
 }
