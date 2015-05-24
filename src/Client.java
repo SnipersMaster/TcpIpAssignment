@@ -30,7 +30,7 @@ public class Client {
             String read;
             // read reading values from bufferreader
             read = bufferedReader.readLine();
-            GUI.genap.addElement(read);
+            GUI.books.addElement(read);
 
         }
 
