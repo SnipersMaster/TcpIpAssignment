@@ -14,13 +14,26 @@ import java.nio.file.Paths;
 public class BooksServer  {
 
     static ServerSocket bookserverSocket;
+    static ServerSocket ftpserver;
     static Socket bookSocket;
     static int sendlock;
-    public static void main(String[] arg) throws IOException
-    {
+    public static void main(String[] arg) throws IOException {
 
-        System.out.println("I am in the background");
-        bookserverSocket=new ServerSocket(7111);
+
+        bookserverSocket = new ServerSocket();
+    //    ftpserver = new ServerSocket(7112);
+
+//        ServerPool serverPool = new ServerPool(bookserverSocket);
+//        ServerPool serverPool2 = new ServerPool(ftpserver);
+//
+//        ServerPool[] serverPools = {serverPool, serverPool2};
+//        for (int i = 0; i < serverPools.length; i++)
+//        {
+//            Thread thread =new Thread(serverPools[i]);
+//            thread.run();
+//        }
+
+
         while (true) {
             bookSocket=bookserverSocket.accept();
             System.out.println("Accepted");
