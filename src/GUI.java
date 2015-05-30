@@ -46,9 +46,7 @@ class GUI extends JFrame{
                 chooser.setCurrentDirectory(new java.io.File("."));
                 chooser.setDialogTitle("Choose Destination folder");
                 chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                //
                 // disable the "All files" option.
-                //
                 chooser.setAcceptAllFileFilterUsed(false);
                 //
                 if (chooser.showOpenDialog(GUI.this) == JFileChooser.APPROVE_OPTION) {
@@ -70,12 +68,9 @@ class GUI extends JFrame{
     private void btnEndClick(ActionEvent evt){
         System.exit(0);
     }
-
     private static class WindowAdapterImpl extends WindowAdapter {
-
         public WindowAdapterImpl() {
         }
-
         @Override
         public void windowClosing(WindowEvent e){
             System.exit(1);

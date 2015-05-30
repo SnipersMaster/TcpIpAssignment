@@ -13,7 +13,7 @@ public class Assignment1_b {
     {
         System.out.println("The Files in this Directory are : ");
 
-        Files.walk(Paths.get("Books")).forEach(filePath -> {
+        Files.walk(Paths.get("C:\\Users\\Sniper\\Downloads")).forEach(filePath -> {
             if (Files.isRegularFile(filePath)) {
 
                 System.out.println("File :"+(++i)+filePath.getFileName());
