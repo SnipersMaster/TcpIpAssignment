@@ -6,8 +6,9 @@ import java.io.IOException;
  * Created by androiddevelopment on 5/31/15.
  */
 public class Assingment1_a {
-
+     //counters
     static int a,b,c,d,e,f;
+
     public static void main(String []arg) throws IOException
     {
         BufferedReader bufferedReader=new BufferedReader(new FileReader("Books/book1.html"));
