@@ -13,7 +13,7 @@ import java.nio.file.Paths;
  * Created by androiddevelopment on 5/22/15.
  */
 public class BooksServer  {
-
+///
     static ServerSocket bookserverSocket;
     static ServerSocket ftpserver;
     static Socket bookSocket;
