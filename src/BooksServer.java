@@ -1,6 +1,7 @@
 import sun.awt.shell.ShellFolder;
 
 import javax.swing.*;
+import javax.swing.tree.ExpandVetoException;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -17,23 +18,14 @@ public class BooksServer  {
     static ServerSocket ftpserver;
     static Socket bookSocket;
     static int sendlock;
-    public static void main(String[] arg) throws IOException {
+    static int flowcontrol=0;
+    public static void main(String[] arg) throws Exception {
 
+        JDialog jDialog=new JDialog();
+        jDialog.setTitle("hello");
+        jDialog.show();
 
-        bookserverSocket = new ServerSocket();
-    //    ftpserver = new ServerSocket(7112);
-
-//        ServerPool serverPool = new ServerPool(bookserverSocket);
-//        ServerPool serverPool2 = new ServerPool(ftpserver);
-//
-//        ServerPool[] serverPools = {serverPool, serverPool2};
-//        for (int i = 0; i < serverPools.length; i++)
-//        {
-//            Thread thread =new Thread(serverPools[i]);
-//            thread.run();
-//        }
-
-
+        bookserverSocket = new ServerSocket(7221);
         while (true) {
             bookSocket=bookserverSocket.accept();
             System.out.println("Accepted");
@@ -50,7 +42,7 @@ public class BooksServer  {
 
                             try {
 
-                                SocketThread socketThread=new SocketThread(new Socket("172.18.213.165", 7222),filePath.getFileName().toString());
+                                SocketThread socketThread=new SocketThread(new Socket("192.168.1.109", 7333),filePath.getFileName().toString());
                                 socketThread.run();
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -59,33 +51,50 @@ public class BooksServer  {
 
                         }
                     });
+
                 }else if(!read.contains("getbooks"))
                 {
-
-                    SendFiletoClient(read);
+                    SocketThread socketThread=new SocketThread(new Socket("192.168.1.109", 7333),"start");
+                    socketThread.run();
+                    //SendFiletoClient(read);
+                    sendfile(read);
                     System.out.println("the book is : "+read);
-                }
 
 
-            }
+
+            }}
 
     // first step to get all the files in the books path
 
     }
 
-    public static void SendFiletoClient(String filename) throws IOException
-    {   Socket socket = new Socket("172.16.15.191", 7333);
-        File file=new File("Books/"+filename);
-        byte[] filearray=new byte[(int)file.length()];
-        FileInputStream fileInputStream=new FileInputStream(file);
-        BufferedInputStream bufferedInputStream=new BufferedInputStream(fileInputStream);
-        bufferedInputStream.read(filearray,0,filearray.length);
-        OutputStream outputStream=socket.getOutputStream();
-        System.out.println("sending file");
-        outputStream.write(filearray,0,filearray.length);
-        outputStream.flush();
-        socket.close();
-        System.out.println("File Transfer complete");
+
+
+    public static void sendfile(String read) throws Exception
+    {
+       // bookserverSocket.close();
+        ServerSocket welcomeSocket = new ServerSocket(7225);
+
+        while (true) {
+            Socket connectionSocket = welcomeSocket.accept();
+            BufferedOutputStream outToClient = new BufferedOutputStream(connectionSocket.getOutputStream());
+            if (outToClient != null) {
+                File myFile = new File("/Users/androiddevelopment/IdeaProjects/TcpIpAssignment/Books/"+read);
+                byte[] mybytearray = new byte[(int) myFile.length()];
+                BufferedInputStream bis = new BufferedInputStream(new FileInputStream(myFile));
+                bis.read(mybytearray, 0, mybytearray.length);
+                outToClient.write(mybytearray, 0, mybytearray.length);
+                outToClient.flush();
+                outToClient.close();
+                connectionSocket.close();
+                welcomeSocket.close();
+                SocketThread socketThread=new SocketThread(new Socket("192.168.1.109", 7333),"finish");
+                socketThread.run();
+
+                return;
+            }
+        }
+
     }
 
 }
