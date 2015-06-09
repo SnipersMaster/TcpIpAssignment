@@ -23,7 +23,7 @@ public class Client {
         f.setVisible(true);
         SendToServer("getbooks");
         serverSocket=new ServerSocket(7333);
-
+//
         while (true) {
             switch(flowcontrol) {
                 case 0:
