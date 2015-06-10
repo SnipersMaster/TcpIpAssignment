@@ -20,18 +20,15 @@ public class BooksServer  {
     static int sendlock;
     static int flowcontrol=0;
     public static void main(String[] arg) throws Exception {
-
-
         bookserverSocket = new ServerSocket(7221);
         while (true) {
             bookSocket=bookserverSocket.accept();
             System.out.println("Accepted");
-            // buffer it reads from server  , requires inputstreamreader  -> inputstream -> socket.getInputStream()  ,
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(bookSocket.getInputStream()));
             String read="";
-            // read reading values from bufferreader
             read = bufferedReader.readLine();
             System.out.println(read);
+
             if(read.contains("getbooks"))
             {
                 Files.walk(Paths.get("Books")).forEach(filePath -> {
@@ -39,7 +36,7 @@ public class BooksServer  {
 
                         try {
 
-                            SocketThread socketThread=new SocketThread(new Socket("192.168.1.109", 7333),filePath.getFileName().toString());
+                            SocketThread socketThread=new SocketThread(new Socket(String.valueOf(Serverip.ClientIP), 7333),filePath.getFileName().toString());
                             socketThread.run();
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -51,7 +48,7 @@ public class BooksServer  {
 
             }else if(!read.contains("getbooks"))
             {
-                SocketThread socketThread=new SocketThread(new Socket("192.168.1.109", 7333),"start");
+                SocketThread socketThread=new SocketThread(new Socket(String.valueOf(Serverip.ClientIP), 7333),"start");
                 socketThread.run();
                 //SendFiletoClient(read);
                 sendfile(read);
@@ -85,7 +82,7 @@ public class BooksServer  {
                 outToClient.close();
                 connectionSocket.close();
                 welcomeSocket.close();
-                SocketThread socketThread=new SocketThread(new Socket("192.168.1.109", 7333),"finish");
+                SocketThread socketThread=new SocketThread(new Socket(String.valueOf(Serverip.ClientIP), 7333),"finish");
                 socketThread.run();
 
                 return;
