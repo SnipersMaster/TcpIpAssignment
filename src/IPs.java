@@ -1,9 +1,9 @@
 /**
  * Created by androiddevelopment on 6/10/15.
  */
-public enum Serverip {
+public enum IPs {
     SERVERIP("172.16.253.242"),
-    ClientIP("172.16.253.242")
+    ClientIP("172.18.88.42")
     ;
 //
     private final String text;
@@ -11,7 +11,7 @@ public enum Serverip {
 //    /**
 //     * @param text
 //     */
-Serverip(final String text) {
+IPs(final String text) {
         this.text = text;
     }
 //

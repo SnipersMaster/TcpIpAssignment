@@ -1,12 +1,7 @@
-import sun.awt.shell.ShellFolder;
-
-import javax.swing.*;
-import javax.swing.tree.ExpandVetoException;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
@@ -15,17 +10,14 @@ import java.nio.file.Paths;
 public class BooksServer  {
 
     static ServerSocket bookserverSocket;
-    static ServerSocket ftpserver;
     static Socket bookSocket;
-    static int sendlock;
-    static int flowcontrol=0;
     public static void main(String[] arg) throws Exception {
         bookserverSocket = new ServerSocket(7221);
         while (true) {
             bookSocket=bookserverSocket.accept();
             System.out.println("Accepted");
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(bookSocket.getInputStream()));
-            String read="";
+            String read;
             read = bufferedReader.readLine();
             System.out.println(read);
 
@@ -36,7 +28,7 @@ public class BooksServer  {
 
                         try {
 
-                            SocketThread socketThread=new SocketThread(new Socket(String.valueOf(Serverip.ClientIP), 7333),filePath.getFileName().toString());
+                            SocketThread socketThread=new SocketThread(new Socket(String.valueOf(IPs.ClientIP), 7333),filePath.getFileName().toString());
                             socketThread.run();
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -48,7 +40,7 @@ public class BooksServer  {
 
             }else if(!read.contains("getbooks"))
             {
-                SocketThread socketThread=new SocketThread(new Socket(String.valueOf(Serverip.ClientIP), 7333),"start");
+                SocketThread socketThread=new SocketThread(new Socket(String.valueOf(IPs.ClientIP), 7333),"start");
                 socketThread.run();
                 //SendFiletoClient(read);
                 sendfile(read);
@@ -72,21 +64,19 @@ public class BooksServer  {
         while (true) {
             Socket connectionSocket = welcomeSocket.accept();
             BufferedOutputStream outToClient = new BufferedOutputStream(connectionSocket.getOutputStream());
-            if (outToClient != null) {
-                File myFile = new File("/Users/androiddevelopment/IdeaProjects/TcpIpAssignment/Books/"+read);
-                byte[] mybytearray = new byte[(int) myFile.length()];
-                BufferedInputStream bis = new BufferedInputStream(new FileInputStream(myFile));
-                bis.read(mybytearray, 0, mybytearray.length);
-                outToClient.write(mybytearray, 0, mybytearray.length);
-                outToClient.flush();
-                outToClient.close();
-                connectionSocket.close();
-                welcomeSocket.close();
-                SocketThread socketThread=new SocketThread(new Socket(String.valueOf(Serverip.ClientIP), 7333),"finish");
-                socketThread.run();
+            File myFile = new File("/Users/androiddevelopment/IdeaProjects/TcpIpAssignment/Books/"+read);
+            byte[] mybytearray = new byte[(int) myFile.length()];
+            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(myFile));
+            bis.read(mybytearray, 0, mybytearray.length);
+            outToClient.write(mybytearray, 0, mybytearray.length);
+            outToClient.flush();
+            outToClient.close();
+            connectionSocket.close();
+            welcomeSocket.close();
+            SocketThread socketThread=new SocketThread(new Socket(String.valueOf(IPs.ClientIP), 7333),"finish");
+            socketThread.run();
 
-                return;
-            }
+            return;
         }
 
     }
